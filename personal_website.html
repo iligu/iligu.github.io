@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ilisha Gupta - Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0514;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        /* Galaxy Background Canvas */
+        #galaxy-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Pixie Dust Cursor Trail */
+        .pixie-dust {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 1), transparent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            animation: fadeOut 1s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0) translateY(-20px);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 5, 20, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all 0.3s;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        header.scrolled {
+            padding: 1rem 2rem;
+            background: rgba(10, 5, 20, 0.95);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: #e0e0e0;
+            text-decoration: none;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .hero-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.1);
+            border: 3px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            transition: transform 0.5s, box-shadow 0.5s;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-image:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px rgba(139, 92, 246, 0.5);
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.3s;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid #8b5cf6;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            opacity: 0;
+            animation: fadeInUp 1s forwards 0.9s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+            transition: left 0.3s;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            left: 0;
+        }
+
+        .cta-button:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            border-color: transparent;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #8b5cf6, #ec4899);
+        }
+
+        /* Tech Stack - Organized by Category */
+        .tech-stack-organized {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tech-category-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .tech-category-title {
+            color: #8b5cf6;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .tech-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tech-item {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 8px;
+            padding: 12px 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .tech-item:hover::before {
+            left: 100%;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-3px);
+            border-color: rgba(139, 92, 246, 0.6);
+            background: rgba(139, 92, 246, 0.1);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .tech-item span {
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .hobbies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hobby-card {
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border-radius: 12px;
+        }
+
+        .hobby-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .hobby-card:hover::before {
+            left: 100%;
+        }
+
+        .hobby-card:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .hobby-image {
+            width: 100%;
+            height: 200px;
+            background: rgba(139, 92, 246, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hobby-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .hobby-card:hover .hobby-image img {
+            transform: scale(1.1);
+        }
+
+        .hobby-content {
+            padding: 1.5rem;
+        }
+
+        .hobby-card h3 {
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .hobby-card p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(139, 92, 246, 0.4), rgba(139, 92, 246, 0.1));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: -8rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            padding-left: 3rem;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            padding-right: 3rem;
+        }
+
+        .timeline-content {
+            position: relative;
+            width: calc(50% - 20px);
+            padding: 2rem;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 12px;
+        }
+
+        .timeline-content:hover {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: rgba(139, 92, 246, 0.6);
+            transform: scale(1.05);
+        }
+
+        .timeline-image {
+            width: 100%;
+            height: 150px;
+            background: rgba(139, 92, 246, 0.05);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            border-radius: 50%;
+            top: 2rem;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.8); }
+            50% { box-shadow: 0 0 30px rgba(139, 92, 246, 1); }
+        }
+
+        .timeline-date {
+            color: #8b5cf6;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h3 {
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-content h4 {
+            color: #b0b0b0;
+            font-weight: normal;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-content p {
+            color: #999;
+            line-height: 1.6;
+        }
+
+        /* Twitter-style Projects Section */
+        .projects-container {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .projects-wrapper {
+            position: relative;
+        }
+
+        .twitter-scroll {
+            display: flex;
+            gap: 2rem;
+            transition: transform 0.5s ease;
+            width: fit-content;
+        }
+
+        .project-tweet {
+            min-width: 400px;
+            max-width: 400px;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .project-tweet:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-10px);
+            border-color: rgba(139, 92, 246, 0.6);
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .tweet-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .tweet-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .tweet-info h4 {
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .tweet-info p {
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        .tweet-image {
+            width: 100%;
+            height: 250px;
+            background: rgba(139, 92, 246, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .tweet-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .tweet-content {
+            padding: 1.5rem;
+        }
+
+        .tweet-tech {
+            color: #8b5cf6;
+            font-size: 0.85rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .tweet-content p {
+            color: #b0b0b0;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .tweet-actions {
+            display: flex;
+            gap: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .tweet-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #888;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .tweet-action:hover {
+            color: #8b5cf6;
+        }
+
+        .project-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .project-nav-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            pointer-events: all;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-nav-btn:hover {
+            background: rgba(139, 92, 246, 0.4);
+            transform: scale(1.1);
+        }
+
+        .project-nav-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Awards Section */
+        .awards-section {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .awards-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .awards-list li {
+            color: #fff;
+            font-size: 1.1rem;
+            line-height: 2;
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .awards-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #8b5cf6;
+            font-size: 1.5rem;
+        }
+
+        /* Quote Section */
+        .quote-section {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 2rem 2rem;
+        }
+
+        .quote-text {
+            font-size: 1.8rem;
+            color: #fff;
+            font-style: italic;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .quote-text::before {
+            content: '"';
+            font-size: 4rem;
+            color: #8b5cf6;
+            position: absolute;
+            top: -20px;
+            left: -30px;
+            opacity: 0.3;
+        }
+
+        .quote-author {
+            color: #8b5cf6;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .contact-section {
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            color: #e0e0e0;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .social-links a:hover {
+            color: #fff;
+            background: rgba(139, 92, 246, 0.3);
+            transform: translateY(-5px);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(20, 10, 30, 0.95);
+            padding: 3rem;
+            border-radius: 15px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            animation: modalSlideIn 0.3s;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #fff;
+            transition: transform 0.3s;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+            color: #8b5cf6;
+        }
+
+        .modal-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+
+        .modal-list li {
+            color: #b0b0b0;
+            line-height: 1.8;
+            font-size: 1.05rem;
+            padding-left: 2rem;
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .modal-list li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: #8b5cf6;
+            font-size: 1.5rem;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #8b5cf6;
+            animation: bounce 2s infinite;
+            opacity: 0.5;
+            font-size: 2rem;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            h2 {
+                font-size: 2rem;
+                letter-spacing: 0.3rem;
+            }
+
+            .tech-row {
+                justify-content: center;
+            }
+
+            .timeline::before {
+                left: 0;
+            }
+
+            .timeline-content {
+                width: calc(100% - 40px);
+                margin-left: 40px !important;
+                padding: 1.5rem !important;
+            }
+
+            .timeline-dot {
+                left: 0;
+                transform: translateX(0);
+            }
+
+            .project-tweet {
+                min-width: 300px;
+                max-width: 300px;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .quote-text {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="galaxy-canvas"></canvas>
+    
+    <div class="scroll-indicator">↓</div>
+    
+    <div class="content">
+        <header id="header">
+            <div class="logo" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">Ilisha Gupta</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#tech-stack">Tech Stack</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#hobbies">Hobbies</a></li>
+                    <li><a href="#awards">Awards</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <section id="home" class="hero">
+            <div class="hero-image">
+                <img src="images/profile.png" alt="Ilisha Gupta" onerror="this.parentElement.innerHTML='Add Your Photo'">
+            </div>
+            <h1>Ilisha Gupta</h1>
+            <p>I aspire to be a modern-day Renaissance Woman – similar to the 16th century 'Renaissance Man' who successfully combined different interests from technology to sustainability and physics, but better. 
+            <br><br>
+            Presently, I am exploring data engineering, product management, and consulting with a side of AI.</p>
+            <a href="#contact" class="cta-button">Get In Touch!</a>
+        </section>
+
+        <section id="tech-stack">
+            <h2>Tech Stack</h2>
+            <div class="tech-stack-organized">
+                <div class="tech-category-section">
+                    <div class="tech-category-title">Frontend</div>
+                    <div class="tech-row">
+                        <div class="tech-item"><span>React</span></div>
+                        <div class="tech-item"><span>React Native</span></div>
+                        <div class="tech-item"><span>TypeScript</span></div>
+                        <div class="tech-item"><span>Figma</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category-section">
+                    <div class="tech-category-title">Backend</div>
+                    <div class="tech-row">
+                        <div class="tech-item"><span>Python</span></div>
+                        <div class="tech-item"><span>Node.js</span></div>
+                        <div class="tech-item"><span>Firebase</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category-section">
+                    <div class="tech-category-title">Database</div>
+                    <div class="tech-row">
+                        <div class="tech-item"><span>SQL</span></div>
+                        <div class="tech-item"><span>MongoDB</span></div>
+                        <div class="tech-item"><span>PostgreSQL</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category-section">
+                    <div class="tech-category-title">Cloud & DevOps</div>
+                    <div class="tech-row">
+                        <div class="tech-item"><span>AWS</span></div>
+                        <div class="tech-item"><span>Docker</span></div>
+                    </div>
+                </div>
+
+                <div class="tech-category-section">
+                    <div class="tech-category-title">Analytics & Tools</div>
+                    <div class="tech-row">
+                        <div class="tech-item"><span>Tableau</span></div>
+                        <div class="tech-item"><span>Power BI</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience">
+            <h2>Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item" onclick="showExperienceModal('Undergraduate Ambassador', 'Salas O Brien', 'October 2025 - Present', 'images/exp1.jpeg', 'Devising GHG + Climate Risk Platform using MERN Stack + Python/Flask APIs and PostgreSQL.', ['Launched real-time low-latency emissions intelligence platform using Python/Flask APIs, improving climate-risk visibility and accelerating compliance decision cycles by ~25%', 'Consolidated 200K+ environmental datapoints into a unified PostgreSQL schema, increasing carbon forecast accuracy by ~18% and reducing manual reporting time by 30+ hours/month'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp1.jpeg" alt="Salas O'Brien" onerror="this.parentElement.innerHTML='Salas O Brien'">
+                        </div>
+                        <div class="timeline-date">October 2025 - Present</div>
+                        <h3>Undergraduate Ambassador</h3>
+                        <h4>Salas O'Brien</h4>
+                        <p>Devising GHG + Climate Risk Platform using Python/Flask APIs and PostgreSQL </p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('Researcher', 'Georgia Tech Computing', 'August 2025 - Present', 'images/exp2.png', 'Benchmarking Sparse Matrices and Autoscheduling Algorithms.', ['Benchmarked graph algorithms using Python/Julia Array-API–compatible implementations to measure throughput, memory access, and kernel efficiency for sparse matrices'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp2.png" alt="Georgia Tech" onerror="this.parentElement.innerHTML='College of Computing @ Georgia Tech'">
+                        </div>
+                        <div class="timeline-date">August 2025 - Present</div>
+                        <h3>Undergraduate Researcher</h3>
+                        <h4>College of Computing @ Georgia Tech</h4>
+                        <p>Benchmarking Sparse Matrices and Autoscheduling Algorithms.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('Consulting + Data Intern', 'National University of Singapore', 'June 2025 - July 2025', 'images/exp3.jpeg', 'Analyzed large-scale data systems and devised recommendations for Board of Governers on reducing parking space requirements by 35%.', ['Ingested 1M+ datapoints via scalable ETL pipelines, Kafka and PostgreSQL to reduce parking space requirements by 35%', 'Developed interactive dashboards and data visualizations with Land Transport Authority, providing reliable analytics using Python & Power BI for long-term campus space and infrastructure planning', 'Presented recommendations to Board of Governors for 2029 implementation'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp3.jpeg" alt="NUS" onerror="this.parentElement.innerHTML='NUS'">
+                        </div>
+                        <div class="timeline-date">June 2025 - July 2025</div>
+                        <h3>Consulting + Data Intern</h3>
+                        <h4>National University of Singapore</h4>
+                        <p>Analyzed large-scale data systems and devised recommendations for Board of Governers on reducing parking space requirements by 35%.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('BS in Computer Science & Mathematics', 'Georgia Institute of Technology', 'August 2025 - Present', 'images/exp4.png', 'Concentration: Artificial Intelligence and System Architecture', ['GPA: 4.0', 'Faculty Honors', 'Coursework: Linear Algebra, Python, Object-oriented Programming, Discrete Mathematics, Multivariable Calculus'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp4.png" alt="Georgia Institute of Technology" onerror="this.parentElement.innerHTML='GT'">
+                        </div>
+                        <div class="timeline-date">August 2025 - </div>
+                        <h3>Bachelor's in Computer Science and Mathematics</h3>
+                        <h4>Georgia Institute of Technology</h4>
+                        <p>GPA: 4.0; Concentration: Artificial Intelligence and System Architecture.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('President and Lead Software Development Engineer', 'The Bin Project (thebinproject.org)', 'October 2023 - August 2025', 'images/exp5.png', 'Created ML system to cut down food waste by 32% for 5000+ students', ['Engineered end-to-end ML-powered food waste classification system using Raspberry Pi, YOLOv7, and custom computer vision pipelines, delivering real-time analytics on consumer food waste behavior to stakeholders', 'Drove menu redesigns that cut food waste by 32% across 3000+ students and staff, reducing costs and advancing sustainability', 'Architected scalability for deployment across 15 schools through Cloud and API integration', 'Spearheaded cross-functional team of 10 and secured $5,000 in funding through scholarships and grants'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp5.png" alt="Bin Project" onerror="this.parentElement.innerHTML='Bin Project'">
+                        </div>
+                        <div class="timeline-date">October 2023 - August 2025 </div>
+                        <h3>President and Lead Software Development Engineer</h3>
+                        <h4> The Bin Project <a href=https://thebinproject.org style="color: white; text-decoration: none;">(thebinproject.org)</a> </h4>
+                        <p>Created ML system to cut down food waste by 32% for 5000+ students.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('Computational Astrophysics Researcher', 'Summer Science Program (affiliated with Caltech and MIT)', 'June 2024 – July 2024', 'images/exp6.png', 'Orbit Trajectory of Asteroid 1990UR1 in Python over 50-million years in teams of 3', ['Devised 50-million-year orbit trajectory of 1990UR1 asteroid with Method of Gauss and Monte Carlo simulation in Python to 99.5% accuracy', 'Submitted to the International Astronomical Union&#39;s Minor Planet Center'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp6.png" alt="SSP" onerror="this.parentElement.innerHTML='SSP'">
+                        </div>
+                        <div class="timeline-date">June 2024 – July 2024 </div>
+                        <h3>Co-author for <a href=https://drive.google.com/file/d/1vWLUdowXPpiQisUZM75T_YDlJj-CO_FQ/view?usp=sharing style="color: white; text-decoration: none;">Computational Astrophysics Research</a></h3>
+                        <h4> Summer Science Program (affiliated with Caltech and MIT) </h4>
+                        <p>Orbit Trajectory of Asteroid 1990UR1 in Python over 50-million years in teams of 3.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('Technical Product Manager', 'EB Impact&#39;s One Repair', 'June 2024 – August 2025', 'images/exp7.png', 'Full Software Development Life Cycle to increase e-waste repairs for Singaporean non-profit by 500+', ['Authored winning proposal with full SLDC that secured $10,000 grant for platform connecting gadget repairers with customers, developed through full-stack web platform (React.js + SQL) and AI LLM repair assistant using NLP', 'Improved engagement by 27% &amp; repaired 500+ gadgets for &#39;Repair Kopitiam&#39; (Singaporean non-profit)'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp7.png" alt="EB Impact" onerror="this.parentElement.innerHTML='EB Impact'">
+                        </div>
+                        <div class="timeline-date">June 2024 – August 2025 </div>
+                        <h3>Technical Product Manager</h3>
+                        <h4> EB Impact's One Repair </h4>
+                        <p>Full Software Development Life Cycle to increase e-waste repairs for Singaporean non-profit by 500+</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item" onclick="showExperienceModal('Research Intern – Modelling', 'Raman Research Institute', 'June 2022 – August 2022', 'images/exp8.png', 'Vectorised modelling and simulations + Time Scheduling Optimisations', ['Implemented 45-point Aperture Synthesis and Time Sequencing model to track sky coverage of Giant Metrewave Radio Telescope for the Indian Pulsar Timing Array Experiment in Python'])">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-image">
+                            <img src="images/exp8.png" alt="RRI" onerror="this.parentElement.innerHTML='RRI'">
+                        </div>
+                        <div class="timeline-date">June 2022 – August 2022 </div>
+                        <h3>Research Intern</h3>
+                        <h4> Raman Research Institute</h4>
+                        <p>Vectorised modelling and simulations + Time Scheduling Optimisations</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="projects" style="margin-top: 12rem;">
+            <h2>Projects</h2>
+            <div class="projects-container">
+                <div class="projects-wrapper">
+                    <div class="project-nav">
+                        <button class="project-nav-btn" onclick="scrollProjects('left')">‹</button>
+                        <button class="project-nav-btn" onclick="scrollProjects('right')">›</button>
+                    </div>
+                    <div class="twitter-scroll" id="projectScroll">
+                        <div class="project-tweet" onclick="showProjectModal('Sharpe Ratio Improvement', 'Python, Pandas, NumPy, SciPy, Maltplotlib', ['Devised and back-tested 4 baseline strategies with varying volatility considerations to understand how to improve S&P 500 performance across bear markets'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">S</div>
+                                <div class="tweet-info">
+                                    <h4>Sharpe Ratio vs Volatility Clustering</h4>
+                                    <p>@iligu · Hidden Markov Modelling, GARCH(1,1) volatility forecasts</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project2.png" alt="Project 2" onerror="this.parentElement.innerHTML='Project 2'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">Python, Pandas, NumPy, SciPy, Maltplotlib</p>
+                                <p>Devised and back-tested 4 baseline strategies with varying volatility considerations to understand how to improve S&P 500 performance across bear markets</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="https://github.com/iligu/Volatility-based-Risk-Management" style="color: white; text-decoration: none;">GitHub</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('Optimizing Electric Vehicle Dynamic Charging Locations using Operations Research', 'Python', ['Optimized Electrical Vehicle dynamic charging location with multi-criteria decision-making TOPSIS based on 15 novel parameters to improve Electric Vehicle ease of charging by 21%', 'Presented as youngest author in the International Conference on Signals, Machines and Automation'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">O</div>
+                                <div class="tweet-info">
+                                    <h4>Optimizing Electric Vehicle Dynamic Charging Locations</h4>
+                                    <p>@iligu · Springer Nature's Lecture Notes in Electrical Engineering</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project3.png" alt="Project 3" onerror="this.parentElement.innerHTML='Project 3'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">Python, SQL</p>
+                                <p>Optimized Electrical Vehicle dynamic charging location with multi-criteria decision-making TOPSIS based on 15 novel parameters</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="https://github.com/iligu/SIGMA24" style="color: white; text-decoration: none;">Abstract</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('Auralize – HackGT 12', 'React Native, JavaScript, Firebase, SQL', ['Architected a real-time synchronized lighting experience across smartphones in React Native via Firebase backend, achieving under 150ms latency for 1000+ concurrent users', 'Engineered anonymous join/room management flows, pattern propagation (e.g. custom UUID generation, coordinate-to-wave math, real-time effect switching), boosting user experience and system reliability under load'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">A</div>
+                                <div class="tweet-info">
+                                    <h4>Auralize – HackGT 12</h4>
+                                    <p>@iligu · React Native, JavaScript, Firebase, SQL</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project4.png" alt="Project 4" onerror="this.parentElement.innerHTML='Project 4'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">React Native, JavaScript, Firebase, SQL</p>
+                                <p>Real-time synchronized lighting experience across smartphones with under 150ms latency for 1000+ concurrent users</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="https://devpost.com/software/auralize" style="color: white; text-decoration: none;">DevPost</a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('Advent of Code', 'Python', ['12-day Advent Calendar with DSA-based problems that are holiday-themed'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">A</div>
+                                <div class="tweet-info">
+                                    <h4>Advent of Code</h4>
+                                    <p>@iligu · Python</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project5.png" alt="Project 5" onerror="this.parentElement.innerHTML='Project 5'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">Python</p>
+                                <p>12-day Advent Calendar with DSA-based problems that are holiday-themed</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="" style="color: white; text-decoration: none;">GitHub (to be updated) </a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('GitHub Wrapped', 'React, MySQL', ['Spotify Wrapped, but make it better and for GitHub!'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">G</div>
+                                <div class="tweet-info">
+                                    <h4>GitHub Wrapped</h4>
+                                    <p>@iligu · React, MySQL</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project6.png" alt="Project 6" onerror="this.parentElement.innerHTML='Project 6'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">React, MySQL</p>
+                                <p>Spotify Wrapped, but make it better and for GitHub!</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="" style="color: white; text-decoration: none;">GitHub (in progress) </a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('GymBuddy', 'MediaPipe, Random Forest, Computer Vision', ['Built a real-time exercise-form evaluation system using MediaPipe to extract skeletal joint coordinates and generate pose-feature vectors with 98% accuracy via live webcam in under 120 ms end-to-end latency', 'Trained a Random Forest classifier + RAG pipeline to detect form and provide instant corrective feedback'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">G</div>
+                                <div class="tweet-info">
+                                    <h4>GymBuddy</h4>
+                                    <p>@iligu · MediaPipe, Random Forest, Computer Vision</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project7.png" alt="Project 7" onerror="this.parentElement.innerHTML='Project 7'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">MediaPipe, Random Forest, Computer Vision</p>
+                                <p>Real-time exercise-form evaluation system with 98% accuracy</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="" style="color: white; text-decoration: none;">GitHub (in progress) </a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('Adjustable Desk', 'CAD/CAM, Lathe, Laser Cutting, Woodworking', ['Designed user-centric adjustable standing desk from scratch based on iterative process'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">A</div>
+                                <div class="tweet-info">
+                                    <h4>Adjustable Desk</h4>
+                                    <p>@iligu · CAD/CAM, Lathe, Laser Cutting, Woodworking</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project8.png" alt="Project 8" onerror="this.parentElement.innerHTML='Project 8'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">CAD/CAM, Lathe, Laser Cutting, Woodworking</p>
+                                <p>Designed user-centric adjustable standing desk from scratch based on iterative process</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action"><a href="https://docs.google.com/presentation/d/17kn3k30-i4JFF33ewNfxL88sfOA-7zqvF5BFPak-XAo/edit?usp=sharing" style="color: white; text-decoration: none;">Portfolio </a></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="project-tweet" onclick="showProjectModal('Roomie', 'Python, Redis, Docker, PostgreSQL, Node.js, gRPC', ['Designed and built production-grade meeting room booking system with REST/gRPC APIs handling search, booking, cancellation, for up to 50+ rooms, preventing double-booking using Redis mutex during high traffic', 'Implemented background workers for auto-canceling no-shows, notifications and deployed a fully containerized stack with Docker + CI tests, and instrumented system-wide monitoring with Prometheus + Grafana dashboards'])">
+                            <div class="tweet-header">
+                                <div class="tweet-avatar">R</div>
+                                <div class="tweet-info">
+                                    <h4>Roomie</h4>
+                                    <p>@iligu · DevOps + CI/CD</p>
+                                </div>
+                            </div>
+                            <div class="tweet-image">
+                                <img src="images/project1.jpg" alt="Project 1" onerror="this.parentElement.innerHTML='Project 1'">
+                            </div>
+                            <div class="tweet-content">
+                                <p class="tweet-tech">Python, Redis, Docker, PostgreSQL, Node.js, gRPC</p>
+                                <p>Production-grade meeting room booking system with REST/gRPC APIs</p>
+                                <div class="tweet-actions">
+                                    <span class="tweet-action">🔗 GitHub (to be added) </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="hobbies">
+            <h2>Clubs & Interests</h2>
+            <div class="hobbies-grid">
+                <div class="hobby-card" onclick="showHobbyModal('John H. Martinson Honors Program Leadership Council', ['Selected to represent 250+ students for campus events and spearhead professional development teams'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby1.png" alt="Honors Program" onerror="this.parentElement.innerHTML='Honors Program'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3>John H. Martinson Honors Program Leadership Council</h3>
+                        <p>Selected to represent 250+ students for campus events and spearhead professional development teams</p>
+                    </div>
+                </div>
+                <div class="hobby-card" onclick="showHobbyModal('Consult Your Community (GT Chapter + National Task Force)', ['Spearheaded outreach for the GT Alumni Association, collecting 650+ Qualtrics survey responses through targeted digital campaigns and on-campus tabling to surface drivers of low attendance and engagement', 'Redesigned strategy for annual $65K event to increase attendance by 500%, defining engagement KPIs, proposing new activity concepts, and outlining action steps to strengthen participation and alumni giving'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby2.png" alt="CYC" onerror="this.parentElement.innerHTML='CYC'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3>Consult Your Community (GT Chapter + National Task Force)</h3>
+                        <p>Developing strategy and management consulting experience by supporting Atlanta non-profits</p>
+                    </div>
+                </div>
+                <div class="hobby-card" onclick="showHobbyModal('Head of Environment – Global Concerns Executive', ['Raised $290K+ by orchestrating large-scale fundraising events with 5000+ attendees for 65+ NGO partners', 'Directed school-wide environmental strategy for 500+ student members, coaching 20 program leaders to deliver high-impact community initiatives across Singapore', 'Strengthened long-term donor engagement'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby3.png" alt="GC Exec" onerror="this.parentElement.innerHTML='GC Exec'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3>Global Concerns Executive – Head of Environment</h3>
+                        <p>Spearheading fundraising efforts of $290,000+ across 65 NGO partners and 500+ student members</p>
+                    </div>
+                </div>
+                <div class="hobby-card" onclick="showHobbyModal('Astronomy', ['Previously founded the UWC Astronomy Club and also received prizes on this nationally (Singapore Astronomy Olympiad Top 25)'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby4.jpg" alt="Astronomy" onerror="this.parentElement.innerHTML='Astronomy'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3>Astronomy</h3>
+                        <p>Previously founded the UWC Astronomy Club and also received prizes on this nationally (Singapore Astronomy Olympiad Top 25). Also took this photo myself!</p>
+                    </div>
+                </div>
+                <div class="hobby-card" onclick="showHobbyModal('Cubing', ['Can solve over 15 different types of Rubik&#39;s Cubes and led classes on this to raise $2500+'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby5.jpg" alt="Cubing" onerror="this.parentElement.innerHTML='Cubing'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3>Cubing</h3>
+                        <p>Can solve over 15 different types of Rubik's Cubes and led classes on this to raise $2500+</p>
+                    </div>
+                </div>
+                <div class="hobby-card" onclick="showHobbyModal('Painting', ['Dabbled across different mediums and previously sold paintings for charity'])">
+                    <div class="hobby-image">
+                        <img src="images/hobby6.png" alt="Painting" onerror="this.parentElement.innerHTML='Painting'">
+                    </div>
+                    <div class="hobby-content">
+                        <h3><a href="https://docs.google.com/presentation/d/1LLqDMFKkD1TLiltXdr8HlAn5NXUFbZru/edit?usp=sharing&ouid=107077060463316129926&rtpof=true&sd=true" style="color: white; text-decoration: none;">Painting</a></h3>
+                        <p>Dabbled across different mediums and previously sold paintings for charity</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="awards" class="awards-section">
+            <h2>Awards & Honors</h2>
+            <ul class="awards-list">
+                <li>GT x AWS GenAI Innovation Hackathon 2nd place | 2025</li>
+                <li>American Invitational Mathematics Exam (AIME): Top 2.5% + Distinction in AMC10 | 2023, 2024</li>
+                <li>Singapore’s National Olympiad of Informatics (NOI) Finalist | 2022, 2023</li>
+                <li>UWC Mathematics and Physics Academic Award – Highest attainment in High School with all honors from Grade 9 to 12 | 2025 </li>
+                <li>UK Mathematical Trust Maclaurin Bronze – Top 100 out of 200,000 | 2023 </li>
+                <li>Grand Champion – NUS Political Association Debate Challenges | 2024 </li>
+                <li>Duke of Edinburgh's National Youth Achievement Award – Silver | 2022 </li>
+            </ul>
+        </section>
+
+        <section class="quote-section">
+            <div class="quote-text">
+                Today, me will live in the moment unless it is unpleasant in which case me will eat a cookie.
+            </div>
+            <div class="quote-author">
+                — Cookie Monster
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <h2>Let's Connect</h2>
+            <p>Feel free to reach out for collaborations or just a friendly chat</p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/ilisha-gupta/" title="LinkedIn">LinkedIn</a>
+                <a href="https://github.com/iligu" title="GitHub">GitHub</a>
+                <a href="mailto:ilisha.gupta@gmail.com" title="Email">Email</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script>
+        // Galaxy Background with Stars and Planets
+        const canvas = document.getElementById('galaxy-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let stars = [];
+        let planets = [];
+        let pixieDust = [];
+        let mouseX = canvas.width / 2;
+        let mouseY = canvas.height / 2;
+
+        class Star {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2;
+                this.speedX = (Math.random() - 0.5) * 0.1;
+                this.speedY = (Math.random() - 0.5) * 0.1;
+                this.opacity = Math.random();
+                this.twinkleSpeed = Math.random() * 0.02;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+
+                this.opacity += this.twinkleSpeed;
+                if (this.opacity > 1 || this.opacity < 0) this.twinkleSpeed *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        class Planet {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 30 + 20;
+                this.hue = Math.random() * 60 + 260;
+                this.speedX = (Math.random() - 0.5) * 0.05;
+                this.speedY = (Math.random() - 0.5) * 0.05;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < -this.size) this.x = canvas.width + this.size;
+                if (this.x > canvas.width + this.size) this.x = -this.size;
+                if (this.y < -this.size) this.y = canvas.height + this.size;
+                if (this.y > canvas.height + this.size) this.y = -this.size;
+            }
+
+            draw() {
+                const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size);
+                gradient.addColorStop(0, `hsla(${this.hue}, 70%, 50%, 0.3)`);
+                gradient.addColorStop(0.5, `hsla(${this.hue}, 70%, 40%, 0.2)`);
+                gradient.addColorStop(1, `hsla(${this.hue}, 70%, 30%, 0)`);
+                
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            }
+        }
+
+        class PixieDust {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+                this.life = 1;
+                this.decay = Math.random() * 0.02 + 0.01;
+                this.hue = Math.random() * 60 + 260;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= this.decay;
+                this.size *= 0.98;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${this.hue}, 70%, 60%, ${this.life})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `hsla(${this.hue}, 70%, 60%, ${this.life})`;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        for (let i = 0; i < 200; i++) {
+            stars.push(new Star());
+        }
+
+        for (let i = 0; i < 5; i++) {
+            planets.push(new Planet());
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 5, 20, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach(star => {
+                star.update();
+                star.draw();
+            });
+
+            planets.forEach(planet => {
+                planet.update();
+                planet.draw();
+            });
+
+            pixieDust = pixieDust.filter(dust => dust.life > 0);
+            pixieDust.forEach(dust => {
+                dust.update();
+                dust.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            for (let i = 0; i < 3; i++) {
+                pixieDust.push(new PixieDust(mouseX, mouseY));
+            }
+        });
+
+        canvas.addEventListener('click', (e) => {
+            for (let i = 0; i < 20; i++) {
+                pixieDust.push(new PixieDust(e.clientX, e.clientY));
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        animate();
+
+        let currentProjectIndex = 0;
+        const projectScroll = document.getElementById('projectScroll');
+        const projectCards = document.querySelectorAll('.project-tweet');
+        const scrollAmount = 420;
+
+        function scrollProjects(direction) {
+            if (direction === 'left') {
+                currentProjectIndex = Math.max(0, currentProjectIndex - 1);
+            } else {
+                currentProjectIndex = Math.min(projectCards.length - 1, currentProjectIndex + 1);
+            }
+            
+            projectScroll.style.transform = `translateX(-${currentProjectIndex * scrollAmount}px)`;
+        }
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+                scrollIndicator.style.opacity = '0';
+            } else {
+                header.classList.remove('scrolled');
+                scrollIndicator.style.opacity = '0.5';
+            }
+        });
+
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.timeline-item').forEach(item => {
+            observer.observe(item);
+        });
+
+        function showHobbyModal(title, bulletPoints) {
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modal-body');
+            
+            const bulletList = Array.isArray(bulletPoints) 
+                ? `<ul class="modal-list">${bulletPoints.map(point => `<li>${point}</li>`).join('')}</ul>`
+                : `<p style="color: #b0b0b0; line-height: 1.8; font-size: 1.1rem;">${bulletPoints}</p>`;
+            
+            modalBody.innerHTML = `
+                <h2 style="color: #fff; margin-bottom: 1rem;">${title}</h2>
+                ${bulletList}
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function showProjectModal(title, tech, bulletPoints) {
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modal-body');
+            
+            const bulletList = Array.isArray(bulletPoints) 
+                ? `<ul class="modal-list">${bulletPoints.map(point => `<li>${point}</li>`).join('')}</ul>`
+                : `<p style="color: #b0b0b0; line-height: 1.8; font-size: 1.1rem;">${bulletPoints}</p>`;
+            
+            modalBody.innerHTML = `
+                <h2 style="color: #fff; margin-bottom: 0.5rem;">${title}</h2>
+                <p style="color: #8b5cf6; margin-bottom: 2rem; font-size: 0.9rem;">${tech}</p>
+                ${bulletList}
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function showExperienceModal(title, company, date, image, shortDesc, bulletPoints) {
+            const modal = document.getElementById('modal');
+            const modalBody = document.getElementById('modal-body');
+            
+            const bulletList = Array.isArray(bulletPoints) 
+                ? `<ul class="modal-list">${bulletPoints.map(point => `<li>${point}</li>`).join('')}</ul>`
+                : `<p style="color: #b0b0b0; line-height: 1.8; font-size: 1.05rem;">${bulletPoints}</p>`;
+            
+            modalBody.innerHTML = `
+                <div style="margin-bottom: 2rem;">
+                    <img src="${image}" alt="${company}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 1rem;" onerror="this.style.display='none'">
+                    <div style="color: #8b5cf6; font-size: 0.9rem; margin-bottom: 0.5rem;">${date}</div>
+                    <h2 style="color: #fff; margin-bottom: 0.5rem;">${title}</h2>
+                    <h3 style="color: #b0b0b0; font-weight: normal; margin-bottom: 2rem;">${company}</h3>
+                </div>
+                ${bulletList}
+            `;
+            
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+        }
+
+        window.addEventListener('click', (e) => {
+            const modal = document.getElementById('modal');
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
